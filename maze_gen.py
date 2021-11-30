@@ -5,6 +5,14 @@ import pygame as pg
 
 maze_gen = bg.BacktrackingGenerator(15, 15)
 grid = maze_gen.generate()
+start = (0, 1)
+finish = (grid.shape[0] - 1, grid.shape[1] - 2)
+
+grid[start] = 0
+grid[finish] = 0
+
+np.savetxt('maze.txt', grid)
+
 
 pg.init()
 screen = pg.display.set_mode((400, 400))
