@@ -1,0 +1,3 @@
+[submodule "mazelib"]
+	path = mazelib
+	url = https://github.com/john-science/mazelib
