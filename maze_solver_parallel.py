@@ -40,7 +40,7 @@ def par_solver(maze, shape, q, stack, start, finish):
 	q.put(-1)
 
 if __name__ == '__main__':
-	code = '''solution = mp.Array('i', maze.flatten(), lock=False)
+	code = '''solution = mp.Array('i', maze.flatten().astype(int), lock=False)
 q = mp.Queue()
 p = mp.Process(target=par_solver, args=(solution, maze.shape, q, [], start, finish))
 p.start()
