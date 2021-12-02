@@ -49,9 +49,8 @@ for size in [10, 30, 50, 100, 300, 500]:
 	finish = (maze.shape[0] - 1, maze.shape[1] - 2)
 
 	print('%dx%d Maze' % (size, size))
-	code = 'solution = seq_solver(maze, start, finish)'
 	num = 10
-	print('Avg. sequential execution time: ', timeit.timeit(globals=globals(), stmt=code, number=num) / num)
+	print('Avg. sequential execution time: ', timeit.timeit(globals=globals(), stmt='seq_solver(maze, start, finish)', number=num) / num)
 	print()
 
 '''

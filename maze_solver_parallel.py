@@ -39,32 +39,33 @@ def par_solver(maze, shape, q, stack, start, finish):
 		maze[loc] = 2
 	q.put(-1)
 
-if __name__ == '__main__':
-	code = '''solution = mp.Array('i', maze.flatten().astype(int), lock=False)
-q = mp.Queue()
-p = mp.Process(target=par_solver, args=(solution, maze.shape, q, [], start, finish))
-p.start()
-running_processes = [p]
+def process_manager(maze, start, finish):
+	solution = mp.Array('i', maze.flatten().astype(int), lock=False)
+	q = mp.Queue()
+	p = mp.Process(target=par_solver, args=(solution, maze.shape, q, [], start, finish))
+	p.start()
+	running_processes = [p]
 
-while True:
-	msg = q.get()
-	if msg == -1:
-		for p in running_processes:
-			p.terminate()
-		break
-	else:
-		(neighbor, stack) = msg
-		p = mp.Process(target=par_solver, args=(solution, maze.shape, q, stack, neighbor, finish))
-		p.start()
-		running_processes.append(p)
-	'''
+	while True:
+		msg = q.get()
+		if msg == -1:
+			for p in running_processes:
+				p.terminate()
+			break
+		else:
+			(neighbor, stack) = msg
+			p = mp.Process(target=par_solver, args=(solution, maze.shape, q, stack, neighbor, finish))
+			p.start()
+			running_processes.append(p)
+
+if __name__ == '__main__':
 	for size in [10, 30, 50, 100, 300, 500]:
 		maze = np.loadtxt('maze_%dx%d.txt' % (size, size))
 		start = 1
 		finish = maze.size - 2
 		print('%dx%d Maze' % (size, size))
 		num = 10
-		print('Avg. parallel execution time: ', timeit.timeit(stmt=code, number=num, globals=globals()) / num)
+		print('Avg. parallel execution time: ', timeit.timeit(stmt='process_manager(maze, start, finish)', number=num, globals=globals()) / num)
 		print()
 
 	#solution_2d = np.frombuffer(solution, dtype="int32").reshape(maze.shape)
