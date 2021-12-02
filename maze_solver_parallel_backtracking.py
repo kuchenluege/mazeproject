@@ -75,7 +75,7 @@ if __name__ == '__main__':
 			start = (0, 1)
 			finish = (maze.shape[0] - 1, maze.shape[1] - 2)
 			print('%dx%d Maze' % (size, size))
-			num = 10
+			num = 50
 
 			print('Avg. parallel (w/ backtracking) execution time: ', timeit.timeit(stmt='solution = pool_manager(maze, start, finish, pool_size)', number=num, globals=globals()) / num)
 			print()
