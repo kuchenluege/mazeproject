@@ -3,7 +3,7 @@ import random
 from mazelib.generate import BacktrackingGenerator as bg
 #import pygame as pg
 
-dim = 300
+dim = 400
 maze_gen = bg.BacktrackingGenerator(dim, dim)
 grid = maze_gen.generate()
 start = (0, 1)

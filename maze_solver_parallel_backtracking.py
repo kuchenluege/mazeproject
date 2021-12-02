@@ -70,7 +70,7 @@ def pool_manager(maze, start, finish, size):
 if __name__ == '__main__':
 	for pool_size in [1, 3, 6, 12, 24, 48]:
 		print('Pool Size: %d' % pool_size)
-		for size in [10, 30, 50, 100, 300, 500]:
+		for size in [10, 30, 50, 100, 200, 300, 400, 500]:
 			maze = np.loadtxt('maze_%dx%d.txt' % (size, size))
 			start = (0, 1)
 			finish = (maze.shape[0] - 1, maze.shape[1] - 2)
