@@ -3,7 +3,7 @@ import random
 from mazelib.generate import BacktrackingGenerator as bg
 import pygame as pg
 
-maze_gen = bg.BacktrackingGenerator(100, 100)
+maze_gen = bg.BacktrackingGenerator(30, 30)
 grid = maze_gen.generate()
 start = (0, 1)
 finish = (grid.shape[0] - 1, grid.shape[1] - 2)
