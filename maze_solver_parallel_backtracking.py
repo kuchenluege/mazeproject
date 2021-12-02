@@ -2,9 +2,11 @@ import numpy as np
 import random
 import multiprocessing as mp
 import timeit
+'''
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame as pg
+'''
 
 def rand_unv_neighbor(maze, loc):
 	up = (0, -1)
