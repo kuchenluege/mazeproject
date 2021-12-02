@@ -43,7 +43,7 @@ def seq_solver(maze, start, finish):
 		else:
 			maze_copy[curr_loc] = 3
 			curr_loc = stack.pop()
-	maze_copy[curr_loc] = 2	
+	maze_copy[curr_loc] = 2
 	return maze_copy
 
 
@@ -61,13 +61,14 @@ def pool_manager(maze, start, finish, size):
 			if res.ready():
 				solution = res.get()
 				pool.terminate()
+				pool.join()
 				unsolved = False
 				break
 
 	return solution
 
 if __name__ == '__main__':
-	for pool_size in [1, 3, 6, 12, 24, 48]:
+	for pool_size in [3, 6, 12, 24, 48]:
 		print('Pool Size: %d' % pool_size)
 		for size in [10, 30, 50, 100, 300, 500]:
 			maze = np.loadtxt('maze_%dx%d.txt' % (size, size))
