@@ -1,9 +1,10 @@
 import numpy as np
 import random
 from mazelib.generate import BacktrackingGenerator as bg
-import pygame as pg
+#import pygame as pg
 
-maze_gen = bg.BacktrackingGenerator(30, 30)
+dim = 300
+maze_gen = bg.BacktrackingGenerator(dim, dim)
 grid = maze_gen.generate()
 start = (0, 1)
 finish = (grid.shape[0] - 1, grid.shape[1] - 2)
@@ -11,8 +12,8 @@ finish = (grid.shape[0] - 1, grid.shape[1] - 2)
 grid[start] = 0
 grid[finish] = 0
 
-np.savetxt('maze.txt', grid)
-
+np.savetxt('maze_%dx%d.txt' % (dim, dim), grid.astype(int), fmt='%i')
+'''
 pg.init()
 screen = pg.display.set_mode((400, 400))
 clock = pg.time.Clock()
@@ -32,3 +33,4 @@ while running:
     screen.blit(surface, (100, 100))
     pg.display.flip()
     clock.tick(60)
+'''

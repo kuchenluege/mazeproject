@@ -1,8 +1,9 @@
 import numpy as np
 import random
-import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
-import pygame as pg
+import timeit
+#import os
+#os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+#import pygame as pg
 
 def rand_unv_neighbor(maze, loc):
 	up = (0, -1)
@@ -39,14 +40,21 @@ def seq_solver(maze, start, finish):
 		else:
 			maze_copy[curr_loc] = 3
 			curr_loc = stack.pop()
-	maze_copy[curr_loc] = 2
+	maze_copy[curr_loc] = 2	
 	return maze_copy
 
-maze = np.loadtxt('maze.txt').astype(int)
-start = (0, 1)
-finish = (maze.shape[0] - 1, maze.shape[1] - 2)
-solution = seq_solver(maze, start, finish)
+for size in [10, 30, 50, 100, 300, 500]:
+	maze = np.loadtxt('maze_%dx%d.txt' % (size, size))
+	start = (0, 1)
+	finish = (maze.shape[0] - 1, maze.shape[1] - 2)
 
+	print('%dx%d Maze' % (size, size))
+	code = 'solution = seq_solver(maze, start, finish)'
+	num = 10
+	print('Avg. sequential execution time: ', timeit.timeit(globals=globals(), stmt=code, number=num) / num)
+	print()
+
+'''
 pg.init()
 screen = pg.display.set_mode((400, 400))
 clock = pg.time.Clock()
@@ -66,3 +74,4 @@ while running:
 	screen.blit(surface, (100, 100))
 	pg.display.flip()
 	clock.tick(60)
+'''

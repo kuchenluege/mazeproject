@@ -1,8 +1,9 @@
 import numpy as np
 import multiprocessing as mp
-import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
-import pygame as pg
+import timeit
+#import os
+#os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+#import pygame as pg
 
 def loc_neighbors(maze, shape, loc):
 	up = -1
@@ -39,30 +40,36 @@ def par_solver(maze, shape, q, stack, start, finish):
 	q.put(-1)
 
 if __name__ == '__main__':
-	maze = np.loadtxt('maze.txt').astype(int)
-	start = 1
-	finish = maze.size - 2
+	code = '''solution = mp.Array('i', maze.flatten(), lock=False)
+q = mp.Queue()
+p = mp.Process(target=par_solver, args=(solution, maze.shape, q, [], start, finish))
+p.start()
+running_processes = [p]
 
-	solution = mp.Array('i', maze.flatten(), lock=False)
-	q = mp.Queue()
-	p = mp.Process(target=par_solver, args=(solution, maze.shape, q, [], start, finish))
-	p.start()
-	running_processes = [p]
+while True:
+	msg = q.get()
+	if msg == -1:
+		for p in running_processes:
+			p.terminate()
+		break
+	else:
+		(neighbor, stack) = msg
+		p = mp.Process(target=par_solver, args=(solution, maze.shape, q, stack, neighbor, finish))
+		p.start()
+		running_processes.append(p)
+	'''
+	for size in [10, 30, 50, 100, 300, 500]:
+		maze = np.loadtxt('maze_%dx%d.txt' % (size, size))
+		start = 1
+		finish = maze.size - 2
+		print('%dx%d Maze' % (size, size))
+		num = 10
+		print('Avg. parallel execution time: ', timeit.timeit(stmt=code, number=num, globals=globals()) / num)
+		print()
 
-	while True:
-		msg = q.get()
-		if msg == -1:
-			for p in running_processes:
-				p.terminate()
-			break
-		else:
-			(neighbor, stack) = msg
-			p = mp.Process(target=par_solver, args=(solution, maze.shape, q, stack, neighbor, finish))
-			p.start()
-			running_processes.append(p)
-
-	solution_2d = np.frombuffer(solution, dtype="int32").reshape(maze.shape)
-
+	#solution_2d = np.frombuffer(solution, dtype="int32").reshape(maze.shape)
+	#np.savetxt('parallel_solution.txt', solution_2d)
+	'''
 	pg.init()
 	screen = pg.display.set_mode((400, 400))
 	clock = pg.time.Clock()
@@ -82,3 +89,4 @@ if __name__ == '__main__':
 	    screen.blit(surface, (100, 100))
 	    pg.display.flip()
 	    clock.tick(60)
+'''
