@@ -62,22 +62,25 @@ def pool_manager(maze, start, finish, size):
 		if res.ready():
 			solution = res.get()
 			break
-
 	return solution
 
 if __name__ == '__main__':
 	f = open("results.txt", "x")
 	for pool_size in [1, 3, 6, 12, 24, 48]:
 		f.write('Pool Size: %d\n' % pool_size)
+		print('Pool Size: %d' % pool_size)
 		for size in [10, 30, 50, 100, 200, 300, 400, 500]:
 			maze = np.loadtxt('maze_%dx%d.txt' % (size, size))
 			start = (0, 1)
 			finish = (maze.shape[0] - 1, maze.shape[1] - 2)
 			f.write('%dx%d Maze\n' % (size, size))
+			print('%dx%d Maze' % (size, size))
 			num = 50
-
-			f.write('Avg. parallel (w/ backtracking) execution time: %f\n' % (timeit.timeit(stmt='solution = pool_manager(maze, start, finish, pool_size)', number=num, globals=globals()) / num))
+			res_time = timeit.timeit(stmt='solution = pool_manager(maze, start, finish, pool_size)', number=num, globals=globals()) / num
+			f.write('Avg. parallel (w/ backtracking) execution time: %f\n' % res_time)
 			f.write('\n')
+			print('Avg. parallel (w/ backtracking) execution time: %f' % res_time)
+			print('\n')
 
 			'''
 			solution = pool_manager(maze, start, finish, pool_size).astype(int)

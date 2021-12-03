@@ -1,0 +1,14 @@
+Pool Size: 1
+10x10 Maze
+Avg. parallel (w/ backtracking) execution time: 0
+
+30x30 Maze
+Avg. parallel (w/ backtracking) execution time: 0
+
+50x50 Maze
+Avg. parallel (w/ backtracking) execution time: 0
+
+100x100 Maze
+Avg. parallel (w/ backtracking) execution time: 0
+
+200x200 Maze
