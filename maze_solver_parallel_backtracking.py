@@ -29,7 +29,7 @@ def rand_unv_neighbor(maze, loc):
 		return neighbor
 	return neighbor
 
-def seq_solver(maze, start, finish):
+def seq_solver(maze, start, finish, e):
 	curr_loc = start
 	stack = []
 	maze_copy = maze.copy()
@@ -44,26 +44,23 @@ def seq_solver(maze, start, finish):
 			maze_copy[curr_loc] = 3
 			curr_loc = stack.pop()
 	maze_copy[curr_loc] = 2
+	e.set()
 	return maze_copy
 
 
 def pool_manager(maze, start, finish, size):
 	pool = mp.Pool(size)
-	results = []
-	for _ in range(size):
-		res = pool.apply_async(seq_solver, args=(maze, start, finish))
-		results.append(res)
+	done_event = mp.Event()
+	results = [pool.apply_async(seq_solver, args=(maze, start, finish, done_event)) for _ in range(size)]
 	
+	done_event.wait()
+	pool.terminate()
+	pool.join()
 	solution = None
-	unsolved = True
-	while unsolved:
-		for res in results:
-			if res.ready():
-				solution = res.get()
-				pool.terminate()
-				pool.join()
-				unsolved = False
-				break
+	for res in results:
+		if res.ready():
+			solution = res.get()
+			break
 
 	return solution
 
