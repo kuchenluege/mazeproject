@@ -2,8 +2,9 @@ import numpy as np
 import random
 import multiprocessing as mp
 import timeit
-'''
+import queue
 import os
+'''
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame as pg
 '''
@@ -29,7 +30,7 @@ def rand_unv_neighbor(maze, loc):
 		return neighbor
 	return neighbor
 
-def seq_solver(maze, start, finish, e):
+def seq_solver(maze, start, finish, q):
 	curr_loc = start
 	stack = []
 	maze_copy = maze.copy()
@@ -44,18 +45,17 @@ def seq_solver(maze, start, finish, e):
 			maze_copy[curr_loc] = 3
 			curr_loc = stack.pop()
 	maze_copy[curr_loc] = 2
-	e.set()
-	print('%s just finished' % mp.current_process().name)
+	q.put('done')
 	return maze_copy
 
 
 def pool_manager(maze, start, finish, size):
 	pool = mp.Pool(size)
 	manager = mp.Manager()
-	done_event = manager.Event()
-	results = [pool.apply_async(seq_solver, args=(maze, start, finish, done_event)) for _ in range(size)]
+	q = manager.Queue()
+	results = [pool.apply_async(seq_solver, args=(maze, start, finish, q)) for _ in range(size)]
 
-	done_event.wait()
+	q.get()
 	pool.terminate()
 	pool.join()
 	solution = None
