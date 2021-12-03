@@ -45,6 +45,7 @@ def seq_solver(maze, start, finish, e):
 			curr_loc = stack.pop()
 	maze_copy[curr_loc] = 2
 	e.set()
+	print('%s just finished' % mp.current_process().name)
 	return maze_copy
 
 
@@ -55,7 +56,6 @@ def pool_manager(maze, start, finish, size):
 	results = [pool.apply_async(seq_solver, args=(maze, start, finish, done_event)) for _ in range(size)]
 
 	done_event.wait()
-	pool.close()
 	pool.terminate()
 	pool.join()
 	solution = None
