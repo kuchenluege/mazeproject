@@ -55,6 +55,7 @@ def pool_manager(maze, start, finish, size):
 	results = [pool.apply_async(seq_solver, args=(maze, start, finish, done_event)) for _ in range(size)]
 
 	done_event.wait()
+	pool.close()
 	pool.terminate()
 	pool.join()
 	solution = None
