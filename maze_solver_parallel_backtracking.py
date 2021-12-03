@@ -69,7 +69,7 @@ def pool_manager(maze, start, finish, size):
 
 if __name__ == '__main__':
 	f = open("results.txt", "x")
-	for pool_size in [1, 3, 6, 12, 24, 48]:
+	for pool_size in [1, 3, 6, 12]:
 		f.write('Pool Size: %d\n' % pool_size)
 		print('Pool Size: %d' % pool_size)
 		for size in [10, 30, 50, 100, 200, 300, 400, 500]:
